@@ -1,0 +1,5 @@
+model,mean,median,max
+sarima,2.71,1.44,7.81
+xgboost,2.8,2.81,6.12
+prophet,2.99,2.43,6.39
+seasonal_naive,4.89,3.91,9.21
