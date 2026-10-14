@@ -2,7 +2,7 @@
 
 Forecasts monthly demand for 50 products six months ahead. It compares SARIMA, Prophet and XGBoost against a naive baseline using rolling-origin backtesting.
 
-> This rebuilds, on public data, the forecasting approach I used as a Data Analyst at Think and Wash. The original work used internal company data that I can't share.
+> This rebuilds, on public data, the forecasting approach I used as a Data Analyst at Think and Wash. The original work used internal company data that I can't share, so the metrics here come from the public data and differ from the original project's.
 
 ![Forecast and backtest error](results/forecast.png)
 
