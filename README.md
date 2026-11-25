@@ -88,3 +88,7 @@ The [tests](test_forecast.py) use synthetic data with known seasonality and tren
 ## What this leaves unresolved
 
 There are no prediction intervals, promotions, prices, stockouts or external events in the models. MAPE also breaks on zero-demand months; use a different metric such as WAPE for a dataset containing those. Before a forecast guided purchasing or staffing, it would need interval estimates and monthly error monitoring. The 2017 slowdown is a concrete reason to track errors by period rather than relying on one average score.
+
+## License
+
+Original software is licensed under the [MIT License](LICENSE). The Kaggle source dataset remains subject to its original competition and dataset terms. Source data is downloaded separately; this license does not grant rights to that data.
