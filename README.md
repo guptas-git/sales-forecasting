@@ -50,6 +50,14 @@ Annual growth drops from 8.6% in 2016 to 3.6% in 2017. SARIMA carries too much o
 
 The final January–June 2018 forecast is fitted on all available history using the model with the lowest average backtest MAPE. Those future actuals are unavailable in this dataset, so that forecast has no measured error here. The backtests select the model; they are not an untouched final test of that selection.
 
+### Does the model win consistently?
+
+SARIMA beats the seasonal baseline for **all 50 items** in each July–December window, but only **2 of 50** in January–June 2017. XGBoost wins on 14 of 50 items in that difficult window. The average ranking hides a period-wide failure, rather than a few troublesome products.
+
+The [consistency table](results/model_consistency.csv) reports wins and error differences for each model and window. Notebook sections 4–5 also refit a fixed example, item 1, at each historical origin and verify its errors against the saved backtest. The [monthly errors](results/item_1_forecast_errors.csv) show whether predictions were too high or too low; no future observations enter those fits.
+
+![Paired error improvements and a fixed product's held-out forecasts](results/forecast_diagnostics.png)
+
 ## Run locally
 
 Tested with Python 3.12. From the repository root:
