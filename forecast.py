@@ -88,7 +88,7 @@ MODELS = {"seasonal_naive": seasonal_naive, "sarima": sarima, "prophet": prophet
 
 
 def mape(actual, pred):
-    # ponytail: MAPE breaks on months with zero sales; switch to WAPE if your data has them
+    # shortcut: MAPE assumes positive monthly sales; use WAPE for data containing zeros.
     return (abs(actual - pred) / actual).mean() * 100
 
 
@@ -105,13 +105,23 @@ def backtest(y, models=MODELS):
 
 
 def plot(y, forecast, summary, best, path):
+    from matplotlib.ticker import StrMethodFormatter
+
+    labels = {"seasonal_naive": "Same month last year", "sarima": "SARIMA", "prophet": "Prophet", "xgboost": "XGBoost"}
     fig, (a, b) = plt.subplots(1, 2, figsize=(14, 4.5), gridspec_kw={"width_ratios": [2, 1]})
-    a.plot(y.index, y.sum(axis=1), label="actual")
-    a.plot(forecast.index, forecast.sum(axis=1), "--", label=f"{best} forecast")
-    a.set_title(f"Total monthly demand, all items, with {H}-month forecast")
+    a.plot(y.index, y.sum(axis=1), color="#315e78", label="Observed sales")
+    a.plot(forecast.index, forecast.sum(axis=1), "--", color="#c48b4a", label=f"{labels[best]} forecast")
+    a.axvspan(forecast.index[0], forecast.index[-1], color="#c48b4a", alpha=0.08)
+    a.set_title(f"Monthly demand across {y.shape[1]} items")
+    a.set_ylabel("Units sold")
+    a.yaxis.set_major_formatter(StrMethodFormatter("{x:,.0f}"))
     a.legend()
-    summary["mean"].sort_values().plot.barh(ax=b)
-    b.set_title("Backtest MAPE % (lower is better)")
+    errors = summary["mean"].sort_values(ascending=False)
+    errors.rename(index=labels).plot.barh(ax=b, color=["#315e78" if name == best else "#aebbc3" for name in errors.index])
+    b.bar_label(b.containers[0], labels=[f"{value:.2f}%" for value in errors], padding=4)
+    b.set_xlim(0, errors.max() * 1.25)
+    b.set_title("Three backtest windows, six months each")
+    b.set_xlabel("Mean MAPE (%) · lower is better")
     b.set_ylabel("")
     fig.tight_layout()
     fig.savefig(path, dpi=120)
